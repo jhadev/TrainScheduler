@@ -1,4 +1,8 @@
-  // Initialize Firebase
+$(document).ready(function(){ 
+
+ 
+ 
+ // Initialize Firebase
   var config = {
     apiKey: "AIzaSyDqtcjf12gyX2r21GmJVrL2-fR62IfjnTE",
     authDomain: "trainscheduler-e90b0.firebaseapp.com",
@@ -11,35 +15,73 @@
 
   // firebase variable
 
-  let firebase = firebase.database();
-
-  //variables
-
-  let train
-  let destination
-  let first
-  let frequency = 0
+  const database = firebase.database();
 
   //onclick function
 
-  $("#add").submit(function() {
+  $("#add").click( function() {
     event.preventDefault();
-    train = $("#train").val().trim();
-    destination = $("#destination").val().trim(); 
-    first = $("#first").val().trim(); 
-    frequency = $("#frequency").val().trim();  
 
+   var train = $("#train").val().trim();
+   var destination = $("#destination").val().trim(); 
+   var first = $("#first").val().trim(); 
+   var frequency = $("#frequency").val().trim(); 
+
+    
     //firebase push
-    database.ref().push({
+
+    var trainInfo = {
       train: train,
       destination: destination,
       first: first,
-      timeAdded: firebase.database.ServerValue.TIMESTAP
-    })
+      frequency: frequency,
+      timeAdded: firebase.database.ServerValue.TIMESTAMP
+    }
+    
+    database.ref().push(trainInfo)
+   
     //empty on submit
-    $("#train-form").empty()
+    $("#train").val("");
+    $("#destination").val("");
+    $("#first").val("");
+    $("#frequency").val("")
+
+    $(".show").show();
   })
+  
+  database.ref().on("child_added", function(childSnapshot) {
+
+    console.log(childSnapshot.val())
+
+    const trainDB = childSnapshot.val().train;
+    const destinationDB = childSnapshot.val().destination;
+    const firstDB = childSnapshot.val().first;
+    const frequencyDB = childSnapshot.val().frequency;
+
+    
+    var minAway;
+    // Chang year so first train comes before now
+    var firstTrainNew = moment(firstDB, "hh:mm").subtract(1, "years");
+    // Difference between the current and firstTrain
+    var diffTime = moment().diff(moment(firstTrainNew), "minutes");
+    var remainder = diffTime % frequencyDB;
+    // Minutes until next train
+    var minAway = frequencyDB - remainder;
+    // Next train time
+    var nextTrain = moment().add(minAway, "minutes");
+    nextTrain = moment(nextTrain).format("hh:mm");
+
+    $("#new").append("<tr><td>" + trainDB +
+            "</td><td>" + destinationDB +
+            "</td><td>" + frequencyDB +
+            "</td><td>" + nextTrain + 
+            "</td><td>" + minAway + "</td></tr>");
+
+        // Handle the errors
+    }, function(errorObject) {
+        console.log("Errors handled: " + errorObject.code);
+});
+
 
  
-
-  //write to page
+})
