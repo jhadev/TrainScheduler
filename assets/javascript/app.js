@@ -17,7 +17,7 @@ $(document).ready(function(){
 
   //onclick function
 
-  $("#add").click( function() {
+  $("#add").click(function(event) {
     event.preventDefault();
     //capture form data
    const train = $("#train").val().trim();
