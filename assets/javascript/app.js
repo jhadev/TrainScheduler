@@ -34,7 +34,6 @@ $(document).ready(function(){
       destination: destination,
       first: first,
       frequency: frequency,
-
     }
     
     database.ref().push(trainInfo)
@@ -45,7 +44,7 @@ $(document).ready(function(){
     $("#first").val("");
     $("#frequency").val("")
 
-    $(body).slideUp();
+   
   })
   
   database.ref().on("child_added", function(childSnapshot) {
