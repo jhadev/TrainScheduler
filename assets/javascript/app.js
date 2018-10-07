@@ -21,21 +21,20 @@ $(document).ready(function(){
 
   $("#add").click( function() {
     event.preventDefault();
-
-   var train = $("#train").val().trim();
-   var destination = $("#destination").val().trim(); 
-   var first = $("#first").val().trim(); 
-   var frequency = $("#frequency").val().trim(); 
+    //capture form data
+   const train = $("#train").val().trim();
+   const destination = $("#destination").val().trim(); 
+   const first = $("#first").val().trim(); 
+   const frequency = $("#frequency").val().trim(); 
 
     
-    //firebase push
-
-    var trainInfo = {
+    //firebase object
+    const trainInfo = {
       train: train,
       destination: destination,
       first: first,
       frequency: frequency,
-      timeAdded: firebase.database.ServerValue.TIMESTAMP
+
     }
     
     database.ref().push(trainInfo)
@@ -46,42 +45,44 @@ $(document).ready(function(){
     $("#first").val("");
     $("#frequency").val("")
 
-    $(".show").show();
+    $(body).slideUp();
   })
   
   database.ref().on("child_added", function(childSnapshot) {
 
     console.log(childSnapshot.val())
-
+    //declare db variables
     const trainDB = childSnapshot.val().train;
     const destinationDB = childSnapshot.val().destination;
     const firstDB = childSnapshot.val().first;
     const frequencyDB = childSnapshot.val().frequency;
 
-    
-    var minAway;
-    // Chang year so first train comes before now
-    var firstTrainNew = moment(firstDB, "hh:mm").subtract(1, "years");
-    // Difference between the current and firstTrain
-    var diffTime = moment().diff(moment(firstTrainNew), "minutes");
-    var remainder = diffTime % frequencyDB;
-    // Minutes until next train
-    var minAway = frequencyDB - remainder;
-    // Next train time
-    var nextTrain = moment().add(minAway, "minutes");
+    //moment.js
+    let firstTrainNew = moment(firstDB, "hh:mm").subtract(1, "years");
+    let diffTime = moment().diff(moment(firstTrainNew), "minutes");
+    let remainder = diffTime % frequencyDB;
+    let minAway = frequencyDB - remainder;
+    let nextTrain = moment().add(minAway, "minutes");
     nextTrain = moment(nextTrain).format("hh:mm");
 
-    $("#new").append("<tr><td>" + trainDB +
-            "</td><td>" + destinationDB +
-            "</td><td>" + frequencyDB +
-            "</td><td>" + nextTrain + 
-            "</td><td>" + minAway + "</td></tr>");
+   //create new row variable
+    const newRow = $("<tr>").append(
+      $("<td>").text(trainDB),
+      $("<td>").text(destinationDB),
+      $("<td>").text(frequencyDB),
+      $("<td>").text(nextTrain),
+      $("<td>").text(minAway),
+    );
 
-        // Handle the errors
+    //append the new row to the table
+    $("#new").append(newRow);
+  });
+
+
+        //error handling
     }, function(errorObject) {
         console.log("Errors handled: " + errorObject.code);
 });
 
 
  
-})
