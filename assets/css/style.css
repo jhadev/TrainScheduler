@@ -17,9 +17,7 @@ only screen and (max-width: 760px),
 	table, thead, tbody, th, td, tr { 
 		display: block; 
 	}
-	#new {
-		padding: 20px;
-	}
+	
 	thead tr { 
 		position: absolute;
 		top: -9999px;
