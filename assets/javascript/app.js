@@ -69,7 +69,10 @@ $(document).ready(function(){
       $("<td>").text(frequencyDB),
       $("<td>").text(nextTrain),
       $("<td>").text(minAway),
+      
     );
+
+    newRow.addClass("margin")
 
     //append the new row to the table
     $("#new").append(newRow);

@@ -8,6 +8,8 @@ h1 {
   margin-bottom: 15px;
 }
 
+
+
 @media 
 only screen and (max-width: 760px),
 (min-device-width: 768px) and (max-device-width: 900px)  {
@@ -29,5 +31,29 @@ only screen and (max-width: 760px),
 		border: none;
 		border-bottom: 1px solid #eee; 
 		position: relative;
-		padding-left: 50%; 
+		padding-left: 50%;
 	}
+
+	.margin {
+		text-align: center;
+	}
+
+	td:before { 
+		/* Now like a table header */
+		position: absolute;
+		/* Top/left values mimic padding */
+		top: 6px;
+		left: 6px;
+		width: 45%; 
+		padding-right: 10px; 
+		white-space: nowrap;
+		font-weight: bold;
+	}
+
+	td:nth-of-type(1):before { content: "Train:"; }
+	td:nth-of-type(2):before { content: "Destination:"; }
+	td:nth-of-type(3):before { content: "Frequency:"; }
+	td:nth-of-type(4):before { content: "Arrival Time:"; }
+	td:nth-of-type(5):before { content: "Minutes Away:"; }
+
+}
