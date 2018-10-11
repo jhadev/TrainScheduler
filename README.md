@@ -2,7 +2,7 @@
 
 ----
 ### An app demonstrating the use moment.js and Google Firebase
-[view here](http://en.wikipedia.org/wiki/Markdown)
+[view here](https://jhadev.github.io/TrainScheduler)
 
 ###
 Changelog
